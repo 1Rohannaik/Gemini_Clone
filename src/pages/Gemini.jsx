@@ -20,9 +20,19 @@ const NavbarItem = ({ icon, label, expanded }) => (
 const Gemini = () => {
   const { loading, onSent, resultData, input, setInput } = useContext(Context);
   const [expanded, setExpanded] = useState(false);
+  const [messages, setMessages] = useState([]);
 
   const toggleNavbar = () => {
     setExpanded(!expanded);
+  };
+
+  const handleSend = () => {
+    if (input.trim() !== "") {
+      const newMessage = { type: "user", text: input };
+      setMessages([newMessage, ...messages]);
+      onSent(input);
+      setInput("");
+    }
   };
 
   return (
@@ -71,13 +81,18 @@ const Gemini = () => {
             alt="logo"
             className="mt-50 h-10 w-10  sticky"
           />
+          {messages.map((message, index) => (
+            <div key={index} className="text-white ml-7 mb-3">
+              <p>{message.text} ?</p>
+            </div>
+          ))}
           {loading ? (
             <div className="flex justify-center items-center h-full">
               <div className="spinner"></div>
             </div>
           ) : (
             resultData && (
-              <div className="bg-black p-6  rounded-lg text-white  font-semibold  space-y-4 leading-loose">
+              <div className="bg-black p-6 rounded-lg text-white font-semibold space-y-4 leading-loose">
                 {resultData}
               </div>
             )
@@ -94,7 +109,7 @@ const Gemini = () => {
           <div className="absolute right-5 top-1/2 transform -translate-y-1/2 text-white text-2xl flex gap-3">
             <FaImage />
             <FaMicrophone />
-            <IoSendSharp onClick={() => onSent(input)} />
+            <IoSendSharp onClick={handleSend} />
           </div>
         </div>
       </div>
