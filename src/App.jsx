@@ -5,11 +5,16 @@ import Gemini from "./pages/Gemini";
 import Layout from "./Layout";
 import { AuthContextProvider } from "./AuthContext";
 import Protected from "./Protected";
+import ContextProvider from "./context/Context"; // import ContextProvider
 
-function App() {
+
+
+export function App() {
   return (
-    <>
-      <AuthContextProvider>
+    <AuthContextProvider>
+      <ContextProvider>
+        {" "}
+        {/* Wrap ContextProvider here */}
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Layout />} />
@@ -18,14 +23,15 @@ function App() {
               path="/gemini"
               element={
                 <Protected>
-                  <Gemini/>
+                  <Gemini />
                 </Protected>
               }
             />
           </Routes>
         </BrowserRouter>
-      </AuthContextProvider>
-    </>
+      </ContextProvider>{" "}
+      {/* Close ContextProvider */}
+    </AuthContextProvider>
   );
 }
 
